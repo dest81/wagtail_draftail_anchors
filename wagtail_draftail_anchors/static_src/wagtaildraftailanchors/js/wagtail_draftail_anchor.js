@@ -52,11 +52,15 @@ window.draftail.initEditor = initEditorOverride;
 
 class AnchorIdentifierSource extends React.Component {
   componentDidMount() {
-    const { editorState, entityType, onComplete } = this.props;
+    const { editorState, entityType, onComplete, entity } = this.props;
 
     const content = editorState.getCurrentContent();
 
-    const anchor = window.prompt("Anchor identifier:");
+    let anchor_id = "";
+    if (entity) {
+      anchor_id = entity.data.anchor;
+    }
+    const anchor = window.prompt("Anchor identifier:", anchor_id);
 
     // Uses the Draft.js API to create a new entity with the right data.
     if (anchor) {
@@ -97,7 +101,6 @@ const getAnchorIdentifierAttributes = (data) => {
 const AnchorIdentifier = (props) => {
   const { entityKey, contentState } = props;
   const data = contentState.getEntity(entityKey).getData();
-
   return <TooltipEntity {...props} {...getAnchorIdentifierAttributes(data)} />;
 };
 
